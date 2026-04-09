@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Laravel') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>{{ config('app.name', 'Voedselbank') }}</title>
+    <link rel="stylesheet" href="{{ asset('css/global.css') }}">
 </head>
 <body>
     @include('partials.navbar')
@@ -17,12 +17,10 @@
     @endif
 
     <main>
+    <main class="page-shell">
         @yield('content')
     </main>
 
-    @if (Auth::check())
-        @include('partials.footer')
-    @endif
-</body>
+    @include('partials.footer')
 </body>
 </html>
