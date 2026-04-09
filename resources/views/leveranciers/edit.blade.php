@@ -30,13 +30,13 @@
         </div>
 
         <div class="form-container">
-            <label for="telefoon" class="form-label">Telefoon</label>
-            <input type="text" name="telefoon" id="telefoon" value="{{ $leverancier->telefoon }}" class="form-input" />
+            <label for="telefoon" class="form-label">Telefoon *</label>
+            <input type="text" name="telefoon" id="telefoon" value="{{ $leverancier->telefoon }}" required class="form-input" />
         </div>
 
         <div class="form-container">
-            <label for="adres" class="form-label">Adres</label>
-            <textarea name="adres" id="adres" class="form-textarea">{{ $leverancier->adres }}</textarea>
+            <label for="adres" class="form-label">Adres *</label>
+            <textarea name="adres" id="adres" required class="form-textarea">{{ $leverancier->adres }}</textarea>
         </div>
 
         <div class="form-container form-last">

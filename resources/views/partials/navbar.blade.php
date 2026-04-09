@@ -1,3 +1,10 @@
+<nav>
+    <div>
+        <a href="/" class="brand">Voedselbank</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/klanten">Klanten</a></li>
+            <li><a href="/contact">Voorraad</a></li>
 <nav class="site-nav">
     <div class="container site-nav-inner">
         <a href="{{ route('home') }}" class="site-brand">Voedselbank</a>

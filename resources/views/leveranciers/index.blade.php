@@ -10,6 +10,24 @@
         </div>
     @endif
 
+    <div class="margin-bottom-1">
+        <form action="/leveranciers" method="GET" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <input
+                type="text"
+                name="zoekterm"
+                class="form-input"
+                placeholder="Zoek op naam, email, telefoon, adres of status"
+                value="{{ request('zoekterm') }}"
+                style="max-width: 320px;"
+            >
+            <button type="submit" class="btn btn-primary">Zoeken</button>
+
+            @if(request('zoekterm'))
+                <a href="/leveranciers" class="btn btn-secondary">Reset</a>
+            @endif
+        </form>
+    </div>
+
     @if($leveranciers->count() > 0)
         <div class="margin-bottom-1">
             <a href="/leveranciers/create" class="btn btn-primary" style="display: inline-block; width: auto;">+ Nieuwe leverancier toevoegen</a>
@@ -51,8 +69,17 @@
             {{ $leveranciers->links() }}
         </div>
     @else
+    @if(request('zoekterm'))
+        <div class="alert alert-danger">
+            Leverancier niet gevonden
+        </div>
+    @else
         <p>Geen leveranciers gevonden.</p>
-        <a href="/leveranciers/create" class="btn btn-primary" style="display: inline-block; width: auto;">Nieuwe leverancier toevoegen</a>
     @endif
+
+    <a href="/leveranciers/create" class="btn btn-primary" style="display: inline-block; width: auto;">
+        Nieuwe leverancier toevoegen
+    </a>
+@endif
 </div>
 @endsection
