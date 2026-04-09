@@ -6,16 +6,9 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
-    @include('partials.navbar')
-
+<body class="auth-page">
     <main>
         @yield('content')
     </main>
-
-    @if (Auth::check())
-        @include('partials.footer')
-    @endif
-</body>
 </body>
 </html>

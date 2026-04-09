@@ -12,14 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('klant', function (Blueprint $table) {
-            $table->id();
-            $table->string('naam');
-            $table->text('adres');
-            $table->string('telefoon')->nullable();
+            $table->id('klant_id');
+            $table->string('gezinsnaam');
+            $table->string('straat');
+            $table->string('huisnummer');
+            $table->string('toevoeging')->nullable();
+            $table->string('postcode');
+            $table->string('plaats');
+            $table->string('telefoonnummer');
             $table->string('email')->unique();
-            $table->date('geboortedatum')->nullable();
-            $table->enum('status', ['actief', 'inactief'])->default('actief');
-            $table->timestamps();
+            $table->integer('aantal_volwassenen')->default(0);
+            $table->integer('aantal_kinderen')->default(0);
+            $table->integer('aantal_babys')->default(0);
+            $table->boolean('is_actief')->default(true);
+            $table->timestamp('datum_aangemaakt')->useCurrent();
+            $table->timestamp('datum_gewijzigd')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

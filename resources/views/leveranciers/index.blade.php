@@ -1,39 +1,58 @@
 @extends('layouts.layout')
 
 @section('content')
-<div class="container" style="padding: 2rem;">
-    <h1>Leveranciersoverzicht</h1>
+<div class="container">
+    <h1 class="page-title">Leveranciersoverzicht</h1>
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
     @if($leveranciers->count() > 0)
-        <table style="width: 100%; border-collapse: collapse; margin-top: 2rem;">
+        <div class="margin-bottom-1">
+            <a href="/leveranciers/create" class="btn btn-primary" style="display: inline-block; width: auto;">+ Nieuwe leverancier toevoegen</a>
+        </div>
+
+        <table>
             <thead>
-                <tr style="background-color: #f8f9fa;">
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Naam</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Email</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Telefoon</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Adres</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Status</th>
+                <tr>
+                    <th>Naam</th>
+                    <th>Email</th>
+                    <th>Telefoon</th>
+                    <th>Adres</th>
+                    <th>Status</th>
+                    <th>Acties</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($leveranciers as $leverancier)
                     <tr>
-                        <td style="border: 1px solid #ddd; padding: 8px;">{{ $leverancier->naam }}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px;">{{ $leverancier->email }}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px;">{{ $leverancier->telefoon }}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px;">{{ $leverancier->adres }}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px;">{{ ucfirst($leverancier->status) }}</td>
+                        <td>{{ $leverancier->naam }}</td>
+                        <td>{{ $leverancier->email }}</td>
+                        <td>{{ $leverancier->telefoon }}</td>
+                        <td>{{ $leverancier->adres }}</td>
+                        <td>{{ ucfirst($leverancier->status) }}</td>
+                        <td class="table-actions">
+                            <a href="/leveranciers/{{ $leverancier->id }}/edit">Wijzigen</a>
+                            <form method="POST" action="/leveranciers/{{ $leverancier->id }}" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-link delete-btn" onclick="return confirm('Weet je zeker dat je deze leverancier wilt verwijderen?')">Verwijderen</button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
-        <div style="margin-top: 2rem;">
+        <div class="margin-top-2">
             {{ $leveranciers->links() }}
         </div>
     @else
         <p>Geen leveranciers gevonden.</p>
-        <a href="/leveranciers/create" style="display: inline-block; padding: 0.5rem 1rem; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">Nieuwe leverancier toevoegen</a>
+        <a href="/leveranciers/create" class="btn btn-primary" style="display: inline-block; width: auto;">Nieuwe leverancier toevoegen</a>
     @endif
 </div>
 @endsection
