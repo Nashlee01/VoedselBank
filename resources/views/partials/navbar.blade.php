@@ -6,7 +6,7 @@
         <ul style="list-style: none; display: flex; gap: 1rem; margin: 0; padding: 0;">
             <li><a href="/" style="text-decoration: none; color: #333;">Home</a></li>
             <li><a href="/donate" style="text-decoration: none; color: #333;">Klanten</a></li>
-            <li><a href="/contact" style="text-decoration: none; color: #333;">Voorraad</a></li>
+            <li><a href="{{ route('voorraad.index') }}" style="text-decoration: none; color: #333;">Voorraad</a></li>
             <li><a href="/about" style="text-decoration: none; color: #333;">Leverancier</a></li>
         </ul>
     </div>
