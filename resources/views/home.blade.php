@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-<div class="container" style="padding: 2rem;">
+<div class="container">
     <h1>Welkom bij de Voedselbank</h1>
     <p>Dit is de homepage van onze voedselbank applicatie. Hier kunt u informatie vinden over onze diensten en hoe u kunt helpen.</p>
     <h2>Onze Missie</h2>

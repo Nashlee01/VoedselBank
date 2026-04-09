@@ -15,16 +15,6 @@
                 <a href="{{ route('voorraad.index') }}" class="btn btn-secondary">Terug naar overzicht</a>
             </div>
 
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
             @if (session('error'))
                 <div class="alert alert-danger">
                     {{ session('error') }}
@@ -40,21 +30,33 @@
                         <div class="form-group">
                             <label for="naam">Naam</label>
                             <input type="text" id="naam" name="naam" value="{{ old('naam', $product->naam) }}" required>
+                            @if ($errors->first('naam'))
+                                <div class="alert alert-danger">{{ $errors->first('naam') }}</div>
+                            @endif
                         </div>
 
                         <div class="form-group">
                             <label for="categorie">Categorie</label>
                             <input type="text" id="categorie" name="categorie" value="{{ old('categorie', $product->categorie) }}" required>
+                            @if ($errors->first('categorie'))
+                                <div class="alert alert-danger">{{ $errors->first('categorie') }}</div>
+                            @endif
                         </div>
 
                         <div class="form-group">
                             <label for="ean">EAN</label>
                             <input type="text" id="ean" name="ean" value="{{ old('ean', $product->ean) }}" required>
+                            @if ($errors->first('ean'))
+                                <div class="alert alert-danger">{{ $errors->first('ean') }}</div>
+                            @endif
                         </div>
 
                         <div class="form-group">
                             <label for="aantal">Aantal</label>
                             <input type="number" id="aantal" name="aantal" value="{{ old('aantal', $product->aantal) }}" min="0" required>
+                            @if ($errors->first('aantal'))
+                                <div class="alert alert-danger">{{ $errors->first('aantal') }}</div>
+                            @endif
                         </div>
                     </div>
 

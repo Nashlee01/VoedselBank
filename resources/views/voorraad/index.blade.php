@@ -43,30 +43,45 @@
                                     <th>Categorie</th>
                                     <th>EAN</th>
                                     <th>Aantal</th>
+                                    <th>Status</th>
                                     <th>Acties</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($producten as $product)
+                                    @php
+                                        $isInGebruik = $product->voorraad !== null;
+                                    @endphp
                                     <tr>
                                         <td>{{ $product->naam }}</td>
                                         <td>{{ $product->categorie }}</td>
                                         <td>{{ $product->ean }}</td>
                                         <td>{{ $product->aantal }}</td>
                                         <td>
+                                            @if ($isInGebruik)
+                                                <span class="status-badge status-badge-warning">In gebruik</span>
+                                            @else
+                                                <span class="status-badge status-badge-success">Niet in gebruik</span>
+                                            @endif
+                                        </td>
+                                        <td>
                                             <div class="actions">
                                                 <a href="{{ route('voorraad.edit', $product->id) }}" class="btn btn-secondary btn-sm">
                                                     Wijzigen
                                                 </a>
 
-                                                <form action="{{ route('voorraad.destroy', $product->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
+                                                @if ($isInGebruik)
+                                                    <span class="status-note">Kan niet verwijderd worden</span>
+                                                @else
+                                                    <form action="{{ route('voorraad.destroy', $product->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
 
-                                                    <button type="submit" class="btn btn-danger btn-sm">
-                                                        Verwijderen
-                                                    </button>
-                                                </form>
+                                                        <button type="submit" class="btn btn-danger btn-sm">
+                                                            Verwijderen
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

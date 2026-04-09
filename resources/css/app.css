@@ -1,11 +1,396 @@
-@import 'tailwindcss';
+/* ========================================
+   GLOBALE STYLES
+   ======================================== */
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+* {
+    margin: 0;
+    padding: 0;
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+}
+
+/* ========================================
+   CONTAINER & LAYOUT
+   ======================================== */
+
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.container-centered {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.container-centered-form {
+    max-width: 400px;
+    width: 100%;
+}
+
+main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-page {
+    min-height: 100vh;
+    background: radial-gradient(circle at top left, rgba(17, 78, 140, 0.12), transparent 25%),
+                linear-gradient(180deg, #f8f9ff 0%, #eef2f7 100%);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem;
+    margin: 4rem 1rem;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(18, 63, 118, 0.12);
+}
+
+.auth-card-inner {
+    width: 100%;
+}
+
+.auth-card h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    color: #123f76;
+}
+
+.auth-intro {
+    text-align: center;
+    margin-bottom: 1.75rem;
+    color: #4b5563;
+    font-size: 0.98rem;
+}
+
+.auth-footer-text a {
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+.auth-footer-text a:hover {
+    color: #0056b3;
+}
+
+/* ========================================
+   NAVBAR
+   ======================================== */
+
+nav {
+    background-color: #f8f9fa;
+    padding: 1rem;
+}
+
+nav > div {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav .brand {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+}
+
+nav .nav-divider {
+    border-left: 1px solid #ddd;
+    padding-left: 1rem;
+}
+
+nav .welcome-text {
+    color: #666;
+}
+
+nav .logout-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+nav .login-link {
+    color: #007bff;
+}
+
+nav .register-link {
+    color: #28a745;
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    margin-top: auto;
+}
+
+/* ========================================
+   FORMS
+   ======================================== */
+
+.form-container {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-last {
+    margin-bottom: 1.5rem;
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+/* ========================================
+   ALERTS / MESSAGES
+   ======================================== */
+
+.alert {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border: 1px solid;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.alert-errors {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.alert-errors div {
+    margin-bottom: 0.5rem;
+}
+
+.alert-errors div:last-child {
+    margin-bottom: 0;
+}
+
+/* ========================================
+   HEADINGS
+   ======================================== */
+
+h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+h1.page-title {
+    text-align: left;
+}
+
+/* ========================================
+   TABLES
+   ======================================== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+}
+
+thead {
+    background-color: #f8f9fa;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    font-weight: bold;
+}
+
+.table-actions a {
+    color: #007bff;
+    text-decoration: none;
+    margin-right: 1rem;
+}
+
+.table-actions a:hover {
+    text-decoration: underline;
+}
+
+.table-actions .delete-btn {
+    color: #dc3545;
+}
+
+/* ========================================
+   LINKS & TEXT
+   ======================================== */
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.margin-top-1 {
+    margin-top: 1rem;
+}
+
+.margin-bottom-1 {
+    margin-bottom: 1rem;
+}
+
+.margin-top-2 {
+    margin-top: 2rem;
+}
+
+.margin-bottom-2 {
+    margin-bottom: 2rem;
+}
+
+/* ========================================
+   PAGINATION (Laravel)
+   ======================================== */
+
+.pagination {
+    margin-top: 2rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.pagination a,
+.pagination span {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.pagination .active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pagination a:hover {
+    background-color: #f8f9fa;
 }

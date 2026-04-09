@@ -31,10 +31,78 @@ a:hover {
     text-decoration: underline;
 }
 
+ul {
+    margin: 0;
+    padding: 0;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
+}
+
+.site-nav {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.site-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.site-brand {
+    color: #1f2937;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.site-brand:hover {
+    text-decoration: none;
+}
+
+.site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+.site-nav-links a {
+    color: #374151;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.site-nav-links a:hover {
+    color: #1f6f5f;
+    text-decoration: none;
+}
+
+.site-nav-text {
+    color: #667085;
+    font-weight: 500;
+}
+
+.site-nav-button {
+    border: none;
+    border-radius: 8px;
+    background-color: #1f6f5f;
+    color: #fff;
+    padding: 0.55rem 0.9rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.site-nav-button:hover {
+    background-color: #19594d;
 }
 
 .page-shell {
@@ -107,6 +175,32 @@ a:hover {
     gap: 0.75rem;
     align-items: center;
     flex-wrap: wrap;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-badge-success {
+    background-color: #ecfdf3;
+    color: #067647;
+}
+
+.status-badge-warning {
+    background-color: #fff7ed;
+    color: #b54708;
+}
+
+.status-note {
+    color: #b54708;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
 .btn {
@@ -229,7 +323,27 @@ a:hover {
     margin-top: 1rem;
 }
 
+footer {
+    margin-top: 2rem;
+    background-color: #343a40;
+    color: #fff;
+    padding: 1rem 0;
+}
+
+footer p {
+    margin: 0;
+}
+
 @media (max-width: 768px) {
+    .site-nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .site-nav-links {
+        width: 100%;
+    }
+
     .page-section {
         padding-top: 1.5rem;
     }

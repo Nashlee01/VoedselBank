@@ -3,16 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Voedselbank') }}</title>
-    <link rel="stylesheet" href="{{ asset('css/global.css') }}">
+    <title>{{ config('app.name', 'Laravel') }}</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
-    @include('partials.navbar')
-
-    <main class="page-shell">
+<body class="auth-page">
+    <main>
         @yield('content')
     </main>
-
-    @include('partials.footer')
 </body>
 </html>

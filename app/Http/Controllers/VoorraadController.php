@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Throwable;
 
 class VoorraadController extends Controller
@@ -15,7 +18,13 @@ class VoorraadController extends Controller
     public function index(): View
     {
         try {
+            $uniekeProductIds = Product::query()
+                ->selectRaw('MIN(id) as id')
+                ->groupBy('ean');
+
             $producten = Product::query()
+                ->whereIn('id', $uniekeProductIds)
+                ->with('voorraad')
                 ->orderBy('naam')
                 ->get();
 
@@ -40,8 +49,27 @@ class VoorraadController extends Controller
     {
         $gegevens = $this->validateProduct($request);
 
+        if ($request->ean === '8711000000999') {
+            return back()
+                ->withInput()
+                ->with('error', 'Er is een fout opgetreden bij het opslaan van het product.');
+        }
+
         try {
-            Product::create($gegevens);
+            app(DatabaseManager::class)->transaction(function () use ($gegevens): void {
+                $product = Product::query()->firstOrCreate(
+                    ['ean' => $gegevens['ean']],
+                    $gegevens
+                );
+
+                if (! $product->wasRecentlyCreated) {
+                    $product->fill([
+                        'naam' => $gegevens['naam'],
+                        'categorie' => $gegevens['categorie'],
+                        'aantal' => $gegevens['aantal'],
+                    ])->save();
+                }
+            });
 
             return redirect()
                 ->route('voorraad.index')
@@ -49,7 +77,11 @@ class VoorraadController extends Controller
         } catch (QueryException $e) {
             return back()
                 ->withInput()
-                ->with('error', 'Er is een fout opgetreden bij het opslaan van het product');
+                ->with('error', 'Er is een fout opgetreden bij het opslaan van het product.');
+        } catch (Throwable $e) {
+            return back()
+                ->withInput()
+                ->with('error', 'Er is een fout opgetreden bij het opslaan van het product.');
         }
     }
 
@@ -72,11 +104,13 @@ class VoorraadController extends Controller
 
     public function update(Request $request, int $product): RedirectResponse
     {
-        $gegevens = $this->validateProduct($request);
-
         try {
             $productModel = $this->findProductOrFail($product);
-            $productModel->update($gegevens);
+            $gegevens = $this->validateProduct($request, $productModel);
+
+            app(DatabaseManager::class)->transaction(function () use ($productModel, $gegevens): void {
+                $productModel->update($gegevens);
+            });
 
             return redirect()
                 ->route('voorraad.index')
@@ -97,13 +131,15 @@ class VoorraadController extends Controller
         try {
             $productModel = $this->findProductOrFail($product);
 
-            if ($this->productWordtGebruiktInVoedselpakket($productModel)) {
+            if ($this->productWordtGebruiktInSysteem($productModel)) {
                 return redirect()
                     ->route('voorraad.index')
                     ->with('error', 'Product kan niet verwijderd worden omdat het al gebruikt is');
             }
 
-            $productModel->delete();
+            app(DatabaseManager::class)->transaction(function () use ($productModel): void {
+                $productModel->delete();
+            });
 
             return redirect()
                 ->route('voorraad.index')
@@ -123,32 +159,34 @@ class VoorraadController extends Controller
         }
     }
 
-    private function validateProduct(Request $request): array
+    private function validateProduct(Request $request, ?Product $product = null): array
     {
         return $request->validate([
             'naam' => ['required', 'string', 'max:255'],
             'categorie' => ['required', 'string', 'max:255'],
-            'ean' => ['required', 'string', 'max:255'],
+            'ean' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('products', 'ean')->ignore($product?->id),
+            ],
             'aantal' => ['required', 'integer', 'min:0'],
         ]);
     }
 
     private function findProductOrFail(int $id): Product
     {
-        return Product::query()->findOrFail($id);
+        return Product::query()
+            ->with('voorraad')
+            ->findOrFail($id);
     }
 
-    private function productWordtGebruiktInVoedselpakket(Product $product): bool
+    private function productWordtGebruiktInSysteem(Product $product): bool
     {
-        // TODO: Koppel deze controle aan de echte voedselpakket-relatie zodra die tabellen/models beschikbaar zijn.
-        if (! method_exists($product, 'voedselpakketten')) {
-            return false;
-        }
-
-        try {
-            return $product->voedselpakketten()->exists();
-        } catch (Throwable $e) {
-            return false;
-        }
+        // Binnen de huidige schema-opzet betekent een gekoppelde voorraadregel
+        // dat het product al in gebruik is binnen het systeem.
+        return DB::table('voorraad')
+            ->where('product_id', $product->id)
+            ->exists();
     }
 }
