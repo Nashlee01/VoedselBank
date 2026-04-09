@@ -7,7 +7,7 @@
             <li><a href="/" style="text-decoration: none; color: #333;">Home</a></li>
             <li><a href="/donate" style="text-decoration: none; color: #333;">Klanten</a></li>
             <li><a href="/contact" style="text-decoration: none; color: #333;">Voorraad</a></li>
-            <li><a href="/about" style="text-decoration: none; color: #333;">Leverancier</a></li>
+            <li><a href="/leveranciers" style="text-decoration: none; color: #333;">Leveranciers</a></li>
         </ul>
     </div>
 </nav>
