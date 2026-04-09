@@ -7,11 +7,24 @@ use App\Models\Leverancier;
 
 class LeveranciersController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $leveranciers = Leverancier::paginate(10);
+        $zoekterm = $request->input('zoekterm');
 
-        return view('leveranciers.index', compact('leveranciers'));
+        $leveranciers = Leverancier::query()
+            ->when($zoekterm, function ($query, $zoekterm) {
+                $query->where(function ($q) use ($zoekterm) {
+                    $q->where('naam', 'like', '%' . $zoekterm . '%')
+                      ->orWhere('email', 'like', '%' . $zoekterm . '%')
+                      ->orWhere('telefoon', 'like', '%' . $zoekterm . '%')
+                      ->orWhere('adres', 'like', '%' . $zoekterm . '%')
+                      ->orWhere('status', 'like', '%' . $zoekterm . '%');
+                });
+            })
+            ->paginate(10)
+            ->appends(['zoekterm' => $zoekterm]);
+
+        return view('leveranciers.index', compact('leveranciers', 'zoekterm'));
     }
 
     public function create()
@@ -24,12 +37,14 @@ class LeveranciersController extends Controller
         $validated = $request->validate([
             'naam' => 'required|string|max:255',
             'email' => 'required|email|unique:leverancier,email',
-            'telefoon' => 'nullable|string|max:20',
-            'adres' => 'nullable|string|max:500',
+            'telefoon' => 'required|string|max:20',
+            'adres' => 'required|string|max:500',
             'status' => 'required|in:actief,inactief',
         ], [
             'email.unique' => 'Leverancier met dit e-mailadres bestaat al',
             'email.email' => 'Ongeldig e-mailadres',
+            'telefoon.required' => 'Telefoonnummer is verplicht',
+            'adres.required' => 'Adres is verplicht',
         ]);
 
         Leverancier::create($validated);
@@ -47,12 +62,14 @@ class LeveranciersController extends Controller
         $validated = $request->validate([
             'naam' => 'required|string|max:255',
             'email' => 'required|email|unique:leverancier,email,' . $leverancier->id,
-            'telefoon' => 'nullable|string|max:20',
-            'adres' => 'nullable|string|max:500',
+            'telefoon' => 'required|string|max:20',
+            'adres' => 'required|string|max:500',
             'status' => 'required|in:actief,inactief',
         ], [
             'email.unique' => 'Leverancier bestaat al',
             'email.email' => 'Ongeldig e-mailadres',
+            'telefoon.required' => 'Telefoonnummer is verplicht',
+            'adres.required' => 'Adres is verplicht',
         ]);
 
         $leverancier->update($validated);
